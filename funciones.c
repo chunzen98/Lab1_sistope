@@ -4,6 +4,10 @@
 #include "stb-master/stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb-master/stb_image_write.h"
+
+//Entradas: Cadena de caracteres que representa el nombre del archivo JPG a leer
+//Funcionamiento: Lee el JPG especificado y lo guarda en variable img.
+//Salidas: Retorna estructura JPG que representa la imagen leida.
 JPG* leerJPG(char* nombreArchivo){
 
 	JPG* img = (JPG*)malloc(sizeof(JPG));
@@ -23,13 +27,18 @@ JPG* leerJPG(char* nombreArchivo){
     return img;
 }
 
-// Se genera data de la imagen a partir de RGB y se escribe con la funcion stb_write
+//Entradas: Puntero a estructura JPG que contiene los datos de la imagen y cadena de caracteres con el nombre de la imagen.
+//Funcionamiento: Se genera data de la imagen a partir de RGB y se escribe con la funcion stb_write.
+//Salidas: Sin salida.
 void escribirJPG(JPG* imagen, char* nombreArchivo){
 
 	//Escribir imagen
 	stbi_write_png(nombreArchivo, imagen->width, imagen->height, imagen->channels, imagen->data, imagen->width * imagen->channels);
 }
 
+//Entradas: Dos punteros a estructuras JPG que representan la imagen y una copia para convertirla a escala de grises.
+//Funcionamiento: Se recorre la lista de datos de la imagen y se aplica la funcion para convertirla en escala de grises.
+//Salidas: Sin salida.
 void escalaGris(JPG* img, JPG* imgGray){
 
     //Parse img data to unsigned char
@@ -56,6 +65,9 @@ void escalaGris(JPG* img, JPG* imgGray){
     }
 }
 
+//Entradas: Dos punteros a estructuras JPG que representan la imagen y una copia de ella, cadena de caracteres con el nombre de la mascara.
+//Funcionamiento: Se lee la mascara, se recorre la imagen y se aplica la mascara.
+//Salidas: Sin salida.
 void filtro(JPG* img, JPG* imgMask, char* maskName){
 
     int* mask = (int*)malloc(sizeof(int) * 9);
@@ -117,7 +129,9 @@ void filtro(JPG* img, JPG* imgMask, char* maskName){
         }
     }
 }
-
+//Entradas: Dos punteros a estructuras JPG que representan la imagen y una copia de ella, entero que representa el umbral para convertir los pixeles a blanco o negro
+//Funcionamiento: Se recorre imagen y si el pixel pasa el umbral se pasa el valor a 255, si no se cambia a 0.
+//Salidas: Sin salida
 void binarizacion(JPG* img, JPG* imgBin, int umbral){
     int x = 0;
     for (int i = 0; i < img->height; i++){
@@ -133,8 +147,11 @@ void binarizacion(JPG* img, JPG* imgBin, int umbral){
     }
 }
 
-// 1 : nearly blacc
-// 0 : not nearly blacc
+
+
+//Entradas: Puntero a estructura JPG que representa la imagen, entero que representa al umbral.
+//Funcionamiento: Se cuentan pixeles blancos y negros, si hay mas pixeles negros la imagen es nearly black, si no es not nearly black
+//Salidas: Entero 1 si es nearly black 0 si no lo es.
 int clasificacion(JPG* img, int umbral){
     int x = 0;
 
@@ -152,7 +169,8 @@ int clasificacion(JPG* img, int umbral){
             x++;
         }    
     }
-
+    // 1 : nearly blacc
+    // 0 : not nearly blacc
     if(pixNegros > pixNoNegros){
         return 1;
     }
