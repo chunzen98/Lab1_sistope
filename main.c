@@ -63,6 +63,7 @@ int main(int argc, char** argv){
     //For cada imagen
 	for (int i = 0; i < nPNG; ++i){	
 
+        // READ
         //Nombre de imagen
         strcpy(bufferNombre, "imagen_");
         sprintf(buffer, "%d",i+1);
@@ -131,58 +132,4 @@ int main(int argc, char** argv){
 
     }
 
-
-
-    // img = leerJPG("test2.jpg");
-
-    // // GRAY
-    // imgGray = (JPG*)malloc(sizeof(JPG));
-    // imgGray->height = img->height;
-    // imgGray->width = img->width;
-    // imgGray->channels = img->channels == 4 ? 2 :1;
-    // imgGray->size = imgGray->height * imgGray->width * imgGray->channels;
-
-    // imgGray->data = (char*)malloc(sizeof(char) * imgGray->size);
-
-    // escalaGris(img, imgGray);
-
-
-    // // MASK
-
-    // imgMask = (JPG*)malloc(sizeof(JPG));
-    // imgMask->height = imgGray->height;
-    // imgMask->width = imgGray->width;
-    // imgMask->channels = imgGray->channels == 4 ? 2 :1;
-    // imgMask->size = imgMask->height * imgMask->width * imgMask->channels;
-    // imgMask->data = (char*)malloc(sizeof(char) * imgMask->size);
-
-    // filtro(imgGray, imgMask, "mask");
-
-    // // Binarziacion
-    // imgBin = (JPG*)malloc(sizeof(JPG));
-    // imgBin->height = imgMask->height;
-    // imgBin->width = imgMask->width;
-    // imgBin->channels = imgMask->channels == 4 ? 2 :1;
-    // imgBin->size = imgBin->height * imgBin->width * imgBin->channels;
-    // imgBin->data = (char*)malloc(sizeof(char) * imgBin->size);
-
-
-    // binarizacion(imgMask, imgBin, 100);
-
-
-    // //Classificacion
-    // int clas = clasificacion(imgBin, 100);
-
-    // if(clas == 1){
-    //     printf("Imagen es nearly BLACC\n");
-    // }
-    // else{
-    //     printf("No es nearly BLACC\n");
-    // }
-
-
-    // // WRITE
-    // escribirJPG(imgGray, "imagenGray.jpg");
-    // escribirJPG(imgMask, "imagenMask.jpg");
-    // escribirJPG(imgBin, "imagenBin.jpg");
 }

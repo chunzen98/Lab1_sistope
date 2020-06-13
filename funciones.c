@@ -169,9 +169,13 @@ int clasificacion(JPG* img, int umbral){
             x++;
         }    
     }
+
+    float porcentajeNegro = (pixNegros*100)/img->size;
+    float porcentajeNoNegro = (pixNoNegros*100)/img->size;
+
     // 1 : nearly blacc
     // 0 : not nearly blacc
-    if(pixNegros > pixNoNegros){
+    if(porcentajeNegro > porcentajeNoNegro){
         return 1;
     }
     else{
