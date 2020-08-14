@@ -12,7 +12,7 @@
         int height;		//img->data px height
         int channels;	//img->data canales (si es 3 no tiene Alpa)
         int size;		//img->data Total de px
-        char* data; 	//NO USAR plox
+        unsigned char* data; 	//NO USAR plox
     } JPG;
 
     JPG* leerJPG(char* nombreArchivo);

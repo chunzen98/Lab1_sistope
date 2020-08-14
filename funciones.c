@@ -86,6 +86,7 @@ void filtro(JPG* img, JPG* imgMask, char* maskName){
     char num3[9];
     
     int z = 0;
+    int numAux = 0; //for char over 255 properties
 
     while(fscanf(maskFile, "%s %s %s", num1, num2, num3) == 3){
         if(z == 0){
@@ -105,24 +106,30 @@ void filtro(JPG* img, JPG* imgMask, char* maskName){
         }
         z++;
     }
-   int x;
+    
+    int x;
     x = 0;
+
     for (int i = 0; i < img->height; i++){
         for (int j = 0; j < img->width; j++){
             if(i == 0 || i == img->height - 1 || j == 0 || j == img->width - 1){
                 imgMask->data[x] = 0;
             }
             else{
-                imgMask->data[x] =  (img->data[x - img->width - 1] * mask[0]) + (img->data[x - img->width] * mask[1]) + (img->data[x - img->width + 1] * mask[2]) +  // top 3
-                                (img->data[x-1] * mask[3]) + (img->data[x] * mask[4]) + (img->data[x+1] * mask[5]) +                                 // mid 3
-                                (img->data[x + img->width - 1] * mask[6]) + (img->data[x + img->width] * mask[7]) + (img->data[x + img->width + 1] * mask[8]);   // bot 3
-            }
-
-            if(imgMask->data[x] > 255){
-                imgMask->data[x] = 255;
-            }
-            else if(imgMask->data[x] < 0){
-                imgMask->data[x] = 0;
+                numAux =  ((int)img->data[x - img->width - 1] * mask[0]) + ((int)img->data[x - img->width] * mask[1]) + ((int)img->data[x - img->width + 1] * mask[2]) +  // top 3
+                                ((int)img->data[x-1] * mask[3]) + ((int)img->data[x] * mask[4]) + ((int)img->data[x+1] * mask[5]) +                                 // mid 3
+                                ((int)img->data[x + img->width - 1] * mask[6]) + ((int)img->data[x + img->width] * mask[7]) + ((int)img->data[x + img->width + 1] * mask[8]);   // bot 3
+                if(numAux > 255){
+                    imgMask->data[x] = 255;    
+                    
+                }
+                else if(numAux < 0){
+                    imgMask->data[x] = 0;
+                }
+                else{
+                    imgMask->data[x] = (char)numAux;
+                }
+                
             }
 
             x++;
@@ -145,6 +152,10 @@ void binarizacion(JPG* img, JPG* imgBin, int umbral){
             x++;
         }    
     }
+    for (int i = 0; i < img->size; i++)
+    {
+        // printf(" %d ", imgBin->data[i]);
+    }
 }
 
 
@@ -160,11 +171,11 @@ int clasificacion(JPG* img, int umbral){
 
     for (int i = 0; i < img->height; i++){
         for (int j = 0; j < img->width; j++){
-            if(img->data[x] < umbral){
-                pixNegros += 1;
+            if(img->data[x] == 255){
+                pixNoNegros += 1;
             }
             else{
-                pixNoNegros += 1;
+                pixNegros += 1;
             }
             x++;
         }    
@@ -173,9 +184,12 @@ int clasificacion(JPG* img, int umbral){
     float porcentajeNegro = (pixNegros*100)/img->size;
     float porcentajeNoNegro = (pixNoNegros*100)/img->size;
 
+
+
+
     // 1 : nearly blacc
     // 0 : not nearly blacc
-    if(porcentajeNegro > porcentajeNoNegro){
+    if(porcentajeNegro > umbral){
         return 1;
     }
     else{

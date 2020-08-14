@@ -88,6 +88,7 @@ int main(int argc, char** argv){
         imgMask->channels = imgGray->channels == 4 ? 2 :1;
         imgMask->size = imgMask->height * imgMask->width * imgMask->channels;
         imgMask->data = (char*)malloc(sizeof(char) * imgMask->size);
+        for (int ex = 0; ex < imgMask->size; ex++){imgMask->data[ex] = 0;}
 
         filtro(imgGray, imgMask, archivoConv);
 
@@ -98,6 +99,7 @@ int main(int argc, char** argv){
         imgBin->channels = imgMask->channels == 4 ? 2 :1;
         imgBin->size = imgBin->height * imgBin->width * imgBin->channels;
         imgBin->data = (char*)malloc(sizeof(char) * imgBin->size);
+        for (int ex = 0; ex < imgBin->size; ex++){imgBin->data[ex] = 0;}
 
         binarizacion(imgMask, imgBin, umbralBin);
 
@@ -131,5 +133,15 @@ int main(int argc, char** argv){
         escribirJPG(imgBin, bufferNombre);
 
     }
+
+    img = NULL;
+    imgGray = NULL;
+    imgMask = NULL;
+    imgBin = NULL;
+
+    free(img);
+    free(imgGray);
+    free(imgMask);
+    free(imgBin);
 
 }
